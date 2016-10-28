@@ -11,6 +11,7 @@ import test.com.testretrofit.retrofit.HttpHandler;
 import test.com.testretrofit.retrofit.TaskObserver;
 import test.com.testretrofit.retrofit.bean.ExpressMessageListBean;
 import test.com.testretrofit.retrofit.service.MineService;
+import test.com.testretrofit.widget.RefreshRecyclerView;
 
 public class MainActivity extends BasicActivity {
 
@@ -19,13 +20,25 @@ public class MainActivity extends BasicActivity {
 	private ActivityMainBinding mDataBinding;
 	private ExpressMessageListAdapter mAdapter;
 
+	private boolean isLoadingMore = true;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		INSTANCE = this;
 		mDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-		getData();
+		observeRefresh();
+	}
+
+	private void observeRefresh() {
+		mDataBinding.recyclerView.setOnRefreshListener(new RefreshRecyclerView.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				getData();
+			}
+		});
+		mDataBinding.recyclerView.onRefresh();
 	}
 
 	private void getData() {
@@ -38,9 +51,10 @@ public class MainActivity extends BasicActivity {
 					@Override
 					public void taskSuccess(ExpressMessageListBean basicBean) {
 						mDataBinding.recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
-//						mDataBinding.recyclerView.addItemDecoration(new SpaceDividerDecoration(MainActivity.this).addTopDecoration(10));
+						//						mDataBinding.recyclerView.addItemDecoration(new SpaceDividerDecoration(MainActivity.this).addTopDecoration(10));
 						mAdapter = new ExpressMessageListAdapter(MainActivity.this, basicBean.getList());
 						mDataBinding.recyclerView.setAdapter(mAdapter);
+						mDataBinding.recyclerView.taskSuccess();
 					}
 				});
 	}
