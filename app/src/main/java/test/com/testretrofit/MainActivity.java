@@ -2,7 +2,7 @@ package test.com.testretrofit;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
 
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -17,6 +17,7 @@ public class MainActivity extends BasicActivity {
 	/** 应用实例 */
 	public static MainActivity INSTANCE;
 	private ActivityMainBinding mDataBinding;
+	private ExpressMessageListAdapter mAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,19 +31,16 @@ public class MainActivity extends BasicActivity {
 	private void getData() {
 		HttpHandler.create()
 				.create(MineService.class)
-				.getExpressMessage("shentong","3316456179946")
+				.getExpressMessage("shentong", "3316456179946")
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(new TaskObserver<ExpressMessageListBean>(this) {
 					@Override
 					public void taskSuccess(ExpressMessageListBean basicBean) {
-						Log.d("taskSuccess",""+basicBean+","+basicBean.getList().get(0).getContext());
-						StringBuffer sb = new StringBuffer();
-						for (int i = 0; i < basicBean.getList().size(); i++) {
-							sb.append(basicBean.getList().get(i).getContext());
-							sb.append("\n");
-						}
-						mDataBinding.setResult(sb.toString());
+						mDataBinding.recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
+//						mDataBinding.recyclerView.addItemDecoration(new SpaceDividerDecoration(MainActivity.this).addTopDecoration(10));
+						mAdapter = new ExpressMessageListAdapter(MainActivity.this, basicBean.getList());
+						mDataBinding.recyclerView.setAdapter(mAdapter);
 					}
 				});
 	}
