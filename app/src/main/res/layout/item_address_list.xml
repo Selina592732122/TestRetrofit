@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<data>
+		<import type="android.view.View"/>
+
+		<variable
+			name="expressMessageItemBean"
+			type="test.com.testretrofit.retrofit.bean.ExpressMessageItemBean"/>
+
+		<variable
+			name="isCurrentItem"
+			type="boolean"/>
+	</data>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@android:color/white"
+		android:paddingLeft="14dp">
+
+		<LinearLayout
+			android:layout_alignParentLeft="true"
+			android:layout_alignParentTop="true"
+			android:id="@+id/ll"
+			android:layout_width="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center_horizontal"
+			android:layout_alignBottom="@+id/ll2"
+			android:layout_height="wrap_content">
+
+			<View
+				android:layout_width="1dp"
+				android:layout_height="14dp"
+				android:visibility="@{isCurrentItem ? View.INVISIBLE : View.VISIBLE}"
+				android:background="#F4A402"/>
+
+			<ImageView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				tools:src="@drawable/trade_flow_point_current"
+				android:src="@{isCurrentItem ? @drawable/trade_flow_point_current : @drawable/trade_flow_point_past}"/>
+
+			<View
+				android:layout_width="1dp"
+				android:layout_height="match_parent"
+				android:background="#F4A402"/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:id="@+id/ll2"
+			android:layout_width="match_parent"
+			android:orientation="vertical"
+			android:layout_toRightOf="@+id/ll"
+			android:paddingTop="14dp"
+			android:paddingLeft="14dp"
+			android:paddingRight="14dp"
+			android:layout_height="wrap_content">
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@{expressMessageItemBean.context}"
+				android:textColor="@color/tv_color"
+				app:selected="@{isCurrentItem}"
+				tools:text="当前快件已到达当前快件已到达当前快件已到达当前快件已到达当前快件已到达"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:textSize="12sp"
+				android:textColor="@color/tv_color"
+				app:selected="@{isCurrentItem}"
+				android:text="@{expressMessageItemBean.time}"
+				tools:text="2014.05.10"/>
+
+			<View android:layout_width="match_parent"
+			      android:layout_marginTop="14dp"
+			      android:layout_height="0.5dp"
+			      android:background="#cdcdcd"/>
+		</LinearLayout>
+
+
+	</RelativeLayout>
+</layout>
