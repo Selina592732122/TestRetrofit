@@ -11,15 +11,15 @@ import java.util.List;
 
 import test.com.testretrofit.databinding.ItemAddressListBinding;
 import test.com.testretrofit.retrofit.bean.ExpressMessageItemBean;
+import test.com.testretrofit.widget.RefreshAdapter;
 
-public class ExpressMessageListAdapter extends RecyclerView.Adapter<ExpressMessageListAdapter.ExpressMessageViewHolder> {
+public class ExpressMessageListAdapter extends RefreshAdapter<List<ExpressMessageItemBean>, ExpressMessageListAdapter.ExpressMessageViewHolder> {
 
 	private List<ExpressMessageItemBean> mList;
 	private Context context;
 
-	public ExpressMessageListAdapter(Context context, List<ExpressMessageItemBean> list) {
+	public ExpressMessageListAdapter(Context context) {
 		this.context = context;
-		this.mList = list;
 	}
 
 	@Override
@@ -28,10 +28,10 @@ public class ExpressMessageListAdapter extends RecyclerView.Adapter<ExpressMessa
 	}
 
 	@Override
-	public void onBindViewHolder(ExpressMessageViewHolder holder, int position) {
-		if(position == 0){
+	public void onBindItemHolder(ExpressMessageViewHolder holder, int position) {
+		if (position == 0) {
 			holder.mDataBinding.setIsCurrentItem(true);
-		}else {
+		} else {
 			holder.mDataBinding.setIsCurrentItem(false);
 		}
 		holder.mDataBinding.setExpressMessageItemBean(mList.get(position));
@@ -40,6 +40,12 @@ public class ExpressMessageListAdapter extends RecyclerView.Adapter<ExpressMessa
 	@Override
 	public int getItemCount() {
 		return mList != null ? mList.size() : 0;
+	}
+
+	@Override
+	public void updateAdapterInfo(List<ExpressMessageItemBean> list) {
+		this.mList = list;
+		notifyDataSetChanged();
 	}
 
 	class ExpressMessageViewHolder extends RecyclerView.ViewHolder {
